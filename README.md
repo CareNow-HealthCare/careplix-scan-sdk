@@ -14,10 +14,10 @@ yarn add careplix-scan-sdk
 
 ```js
 //import Face Scan module
-import * as facescan from "careplix-scan-sdk/facescan";
+import { facescan } from "careplix-scan-sdk";
 
 //import Finger Scan module
-import * as fingerscan from "careplix-scan-sdk/fingerscan";
+import { fingerscan } from "careplix-scan-sdk";
 ```
 
 # Usage
@@ -115,6 +115,8 @@ This function call starts the Scan.
 | --- | --- | --- | --- |
 | scanDuration | number | 60 | Duration of Scan phase in sec (30-120 in multiples of 5) |
 | livelinessDetectionDuration | number | 50 | Duration after which liveliness is checked |
+| strictness | number | 4 | Level of strictness between 1 to 5 |
+| drawConfig | { type: string, color: string, lineSize: number } | { type: "rounded-corners", color: "#fff", lineSize: 5 } | Configuration options for shape drawn around the face during the scan.<br/>type can be "face-circle" or "face-mesh" or "rounded-corners"<br/>also, color & lineSize can be set as needed. |
 | models_path | string | CarePlix CDN | Path of the models directory, only if model files are self-hosted |
 | videoElement | HTMLVideoElement | | Ref (React) or DOMElement refering to video element |
 | canvasElement | HTMLCanvasElement | | Ref (React) or DOMElement refering to canvas element |

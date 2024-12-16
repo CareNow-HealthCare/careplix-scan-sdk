@@ -1,3 +1,3 @@
-import * as facescan from "./facescan";
-import * as fingerscan from "./fingerscan";
+import * as facescan from "./facescan.js";
+import * as fingerscan from "./fingerscan.js";
 export { facescan, fingerscan };
