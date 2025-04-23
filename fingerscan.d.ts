@@ -13,7 +13,7 @@ export function onFrame(
   }) => void
 ): void;
 export function onScanFinish(callback: ({ raw_intensity, ppg_time, average_fps }: ScanRawData) => void): void;
-export function onError(callback: (err: Error) => void): void;
+export function onError(callback: (err: Error, code: string, stackTrace?: string | undefined) => void): void;
 export function startScan({
   scanDuration,
   videoElement,

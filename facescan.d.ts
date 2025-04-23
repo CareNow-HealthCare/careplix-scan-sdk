@@ -15,7 +15,7 @@ export function onFrame(
   }) => void
 ): void;
 export function onScanFinish(callback: ({ raw_intensity, ppg_time, average_fps }: ScanRawData) => void): void;
-export function onError(callback: (err: Error) => void): void;
+export function onError(callback: (err: Error, code: string, stackTrace?: string | undefined) => void): void;
 export function startScan({
   scanDuration,
   livelinessDetectionDuration,
@@ -24,6 +24,7 @@ export function startScan({
   canvasElement,
   strictness,
   drawConfig: { type, color, lineSize },
+  deviceModel,
 }: {
   scanDuration?: number;
   livelinessDetectionDuration?: number;
@@ -32,5 +33,6 @@ export function startScan({
   canvasElement: HTMLCanvasElement;
   strictness?: 1 | 2 | 3 | 4 | 5;
   drawConfig?: { type?: "face-circle" | "face-mesh" | "rounded-corners"; color?: string; lineSize?: number };
+  deviceModel?: string;
 }): Promise<void>;
 export function stopScan(): void;

@@ -38,7 +38,7 @@ Include the following html elements in the Scan Page.
 facescan.onFrame(({ type, message, progress, timeElapsed, isLiteMode }) => {
   // Save each frame data
 });
-facescan.onError((err) => {
+facescan.onError((err, code, stackTrace) => {
   // On any error this callback will be called
 });
 facescan.onScanFinish(({ raw_intensity, ppg_time, average_fps }) => {
@@ -91,11 +91,11 @@ During Scan you recieve data from every processed frame through this callback.
 
 ### `onError()`
 
-If any error occurs during Scan, this callback will be called with the `Error` object.
-| Error Message | Cause/Reason |
-| --- | --- |
-| Please check your internet connection & try again. | SDK failed to download neccessary files for AI scan. |
-| No suitable subject detected. If the issue persists, consider adjusting the framing or removing any obstructions from the view. | No human face detected for a certain duration during scan-time. |
+If any error occurs during Scan, this callback will be called with the `Error` object and `Code` string.
+| Error Code | Error Message | Cause/Reason |
+| --- | --- | --- |
+| FCINT01 | Please check your internet connection & try again. | SDK failed to download neccessary files for AI scan. |
+| FCSCN01 | No suitable subject detected. If the issue persists, consider adjusting the framing or removing any obstructions from the view. | No human face detected for a certain duration during scan-time. |
 
 [More Errors...](#Errors)
 
@@ -116,6 +116,7 @@ This function call starts the Scan.
 | scanDuration | number | 60 | Duration of Scan phase in sec (30-120 in multiples of 5) |
 | livelinessDetectionDuration | number | 50 | Duration after which liveliness is checked |
 | strictness | number | 4 | Level of strictness between 1 to 5 |
+| deviceModel | string | window.navigator.userAgent | The Model name/number of the Device. e.g. "SM-S918B" denotes a "Samsung S23 Ultra" device. If this parameter isn't provided then Model is assumed from [userAgentData](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgentData) or [userAgent](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgent) |
 | drawConfig | { type: string, color: string, lineSize: number } | { type: "rounded-corners", color: "#fff", lineSize: 5 } | Configuration options for shape drawn around the face during the scan.<br/>type can be "face-circle" or "face-mesh" or "rounded-corners"<br/>also, color & lineSize can be set as needed. |
 | models_path | string | CarePlix CDN | Path of the models directory, only if model files are self-hosted |
 | videoElement | HTMLVideoElement | | Ref (React) or DOMElement refering to video element |
@@ -136,7 +137,7 @@ During Calibration time we try to detect if the device has enough processing res
 fingerscan.onFrame(({ type, message, progress, timeElapsed }) => {
   // Save each frame data
 });
-fingerscan.onError((err) => {
+fingerscan.onError((err, code, stackTrace) => {
   // On any error this callback will be called
 });
 fingerscan.onScanFinish(({ raw_intensity, ppg_time, average_fps }) => {
@@ -188,10 +189,10 @@ During Scan you recieve data from every processed frame through this callback.
 
 ### `onError()`
 
-If any error occurs during Scan, this callback will be called with the `Error` object.
-| Error Message | Cause/Reason |
-| --- | --- |
-| Flash could not be acquired. | (Non-Severe) This error will not Cancel the Scan.<br>This error will be logged in console, when device flashlight isn't accessible via the SDK or Browser. |
+If any error occurs during Scan, this callback will be called with the `Error` object and `Code` string.
+| Error Code | Error Message | Cause/Reason |
+| --- | --- | --- |
+| --- | Flash could not be acquired. | (Non-Severe) This error will not Cancel the Scan.<br>This error will be logged in console, when device flashlight isn't accessible via the SDK or Browser. |
 
 [More Errors...](#Errors)
 
@@ -220,11 +221,18 @@ This function call stops the Scan.
 ## Errors
 
 Following are some Errors which are common to both Finger/Face Scan SDK
-| Error Message | Cause/Reason |
-| --- | --- |
-| We are not able to access the Camera. Please try again. | SDK is unable to get access to camera, either browser permission is disabled, or device camera is disabled, or hardware camera is not available. |
-| Sorry we're unable to compute the signal. Please try again. | SDK failed to perform some logical operation during the scan. |
-| App functionality disabled in the Background. Keep it in the Foreground for proper operation. | App is moved to background, maybe due to a phone-call or other reasons. |
+| Error Code | Error Message | Cause/Reason |
+| --- | --- | --- |
+| CMUSR01 | We are not able to access the Camera. Please try again. | SDK is unable to get access to camera, either browser permission is disabled, or device camera is disabled, or hardware camera is not available. |
+| CMUSR02 | App functionality disabled in the Background. Keep it in the Foreground for proper operation. | App is moved to background, maybe due to a phone-call or other reasons. |
+| CMSCN01 | Sorry we're unable to compute the signal. Please try again. | SDK failed to perform some logical operation during the scan. |
+
+## Get Device Model Name
+```js
+import { getDeviceModelName } from "careplix-scan-sdk";
+
+const deviceModel = await getDeviceModelName();
+```
 
 ## Capture image during scan
 

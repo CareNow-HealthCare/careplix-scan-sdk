@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "careplix-scan-sdk",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "CarePlix NPM Module for Web to generate Raw-Data from Camera",
   "keywords": [
     "CarePlix",
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/CareNow-HealthCare/careplix-scan-sdk#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/CareNow-HealthCare/careplix-scan-sdk.git"
+    "url": "git+https://github.com/CareNow-HealthCare/careplix-scan-sdk.git"
   },
   "bugs": {
     "url": "https://github.com/CareNow-HealthCare/careplix-scan-sdk/issues"
