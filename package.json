@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "careplix-scan-sdk",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "CarePlix NPM Module for Web to generate Raw-Data from Camera",
   "keywords": [
     "CarePlix",

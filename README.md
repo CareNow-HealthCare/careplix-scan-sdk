@@ -113,7 +113,7 @@ When the scan is finished successfully, this callback will be called with raw da
 This function call starts the Scan.
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
-| scanDuration | number | 60 | Duration of Scan phase in sec (30-120 in multiples of 5) |
+| scanDuration | number | 60 | Duration of Scan phase in sec (30-120) |
 | livelinessDetectionDuration | number | 50 | Duration after which liveliness is checked |
 | strictness | number | 4 | Level of strictness between 1 to 5 |
 | deviceModel | string | window.navigator.userAgent | The Model name/number of the Device. e.g. "SM-S918B" denotes a "Samsung S23 Ultra" device. If this parameter isn't provided then Model is assumed from [userAgentData](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgentData) or [userAgent](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgent) |
@@ -210,7 +210,7 @@ When the scan is finished successfully, this callback will be called with raw da
 This function call starts the Scan.
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
-| scanDuration | number | 60 | Duration of Scan phase in sec (10-120 in multiples of 5) |
+| scanDuration | number | 60 | Duration of Scan phase in sec (10-120) |
 | videoElement | HTMLVideoElement | | Ref (React) or DOMElement refering to video element |
 | canvasElement | HTMLCanvasElement | | Ref (React) or DOMElement refering to canvas element |
 
