@@ -35,7 +35,7 @@ Include the following html elements in the Scan Page.
 
 ```js
 // Initialize the Callbacks
-facescan.onFrame(({ type, message, progress, timeElapsed, isLiteMode }) => {
+facescan.onFrame(({ type, message, progress, timeElapsed, isLiteMode, isThrottling }) => {
   // Save each frame data
 });
 facescan.onError((err, code, stackTrace) => {
@@ -65,7 +65,7 @@ const videoRef = useRef();
 const canvasRef = useRef();
 
 React.useEffect(() => {
-  // intialize all the callbacks like onFrame, onScanFinish, onError etc.
+  // initialize all the callbacks like onFrame, onScanFinish, onError etc.
   ...
 
   // Start Scan Process
@@ -80,24 +80,25 @@ React.useEffect(() => {
 
 ### `onFrame()`
 
-During Scan you recieve data from every processed frame through this callback.
+During Scan you receive data from every processed frame through this callback.
 | Property Name | Type | Description |
 | --- | --- | --- |
 | type | string | Type of the frame. Which can be either `"error"` or `"calibration"` or `"scan"` |
 | message | string | Hint for user to correct the position of their face on the screen |
 | progress | number | Progress percentage of the scan |
 | timeElapsed | number | Time Elapsed in ms |
-| isLiteMode | boolean | `true` when the SDK switches to [Lite-Mode](#LiteMode) |
+| isLiteMode | boolean | `true` when the SDK switches to [Lite-Mode](#litemode) |
+| isThrottling | boolean | `true` when the device performance is likely throttling |
 
 ### `onError()`
 
 If any error occurs during Scan, this callback will be called with the `Error` object and `Code` string.
 | Error Code | Error Message | Cause/Reason |
 | --- | --- | --- |
-| FCINT01 | Please check your internet connection & try again. | SDK failed to download neccessary files for AI scan. |
+| FCINT01 | Please check your internet connection & try again. | SDK failed to download necessary files for AI scan. |
 | FCSCN01 | No suitable subject detected. If the issue persists, consider adjusting the framing or removing any obstructions from the view. | No human face detected for a certain duration during scan-time. |
 
-[More Errors...](#Errors)
+[More Errors...](#errors)
 
 ### `onScanFinish()`
 
@@ -114,13 +115,14 @@ This function call starts the Scan.
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
 | scanDuration | number | 60 | Duration of Scan phase in sec (30-120) |
-| livelinessDetectionDuration | number | 50 | Duration after which liveliness is checked |
+| livelinessDetectionDuration | number | 50 | Duration in sec (10 to scanDuration) within which liveliness is detected |
 | strictness | number | 4 | Level of strictness between 1 to 5 |
-| deviceModel | string | window.navigator.userAgent | The Model name/number of the Device. e.g. "SM-S918B" denotes a "Samsung S23 Ultra" device. If this parameter isn't provided then Model is assumed from [userAgentData](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgentData) or [userAgent](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgent) |
+| deviceModel | string | Derived from userAgentData/userAgent | The Model name/number of the Device. e.g. "SM-S918B" denotes a "Samsung S23 Ultra" device. If this parameter isn't provided then Model is assumed from [userAgentData](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgentData) or [userAgent](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgent) |
 | drawConfig | { type: string, color: string, lineSize: number } | { type: "rounded-corners", color: "#fff", lineSize: 5 } | Configuration options for shape drawn around the face during the scan.<br/>type can be "face-circle" or "face-mesh" or "rounded-corners"<br/>also, color & lineSize can be set as needed. |
 | models_path | string | CarePlix CDN | Path of the models directory, only if model files are self-hosted |
-| videoElement | HTMLVideoElement | | Ref (React) or DOMElement refering to video element |
-| canvasElement | HTMLCanvasElement | | Ref (React) or DOMElement refering to canvas element |
+| tryHDCamera | boolean | false | Scan is started with the camera at standard resolution by default for better performance. Set this to `true` to start the camera in HD. Note: the SDK may still drop back to the standard resolution automatically if runtime performance is poor. |
+| videoElement | HTMLVideoElement | | Ref (React) or DOMElement referring to video element |
+| canvasElement | HTMLCanvasElement | | Ref (React) or DOMElement referring to canvas element |
 
 ### `stopScan()`
 
@@ -134,7 +136,7 @@ During Calibration time we try to detect if the device has enough processing res
 
 ```js
 // Initialize the Callbacks
-fingerscan.onFrame(({ type, message, progress, timeElapsed }) => {
+fingerscan.onFrame(({ type, message, progress, timeElapsed, isThrottling }) => {
   // Save each frame data
 });
 fingerscan.onError((err, code, stackTrace) => {
@@ -164,7 +166,7 @@ const videoRef = useRef();
 const canvasRef = useRef();
 
 React.useEffect(() => {
-  // intialize all the callbacks like onFrame, onScanFinish, onError etc.
+  // initialize all the callbacks like onFrame, onScanFinish, onError etc.
   ...
 
   // Start Scan Process
@@ -179,13 +181,14 @@ React.useEffect(() => {
 
 ### `onFrame()`
 
-During Scan you recieve data from every processed frame through this callback.
+During Scan you receive data from every processed frame through this callback.
 | Property Name | Type | Description |
 | --- | --- | --- |
 | type | string | Type of the frame. Which can be either `"error"` or `"calibration"` or `"scan"` |
 | message | string | Hint for user to correct the position of their finger on the back camera |
 | progress | number | Progress percentage of the scan |
 | timeElapsed | number | Time Elapsed in ms |
+| isThrottling | boolean | `true` when the device performance is likely throttling |
 
 ### `onError()`
 
@@ -194,7 +197,7 @@ If any error occurs during Scan, this callback will be called with the `Error` o
 | --- | --- | --- |
 | --- | Flash could not be acquired. | (Non-Severe) This error will not Cancel the Scan.<br>This error will be logged in console, when device flashlight isn't accessible via the SDK or Browser. |
 
-[More Errors...](#Errors)
+[More Errors...](#errors)
 
 ### `onScanFinish()`
 
@@ -211,8 +214,8 @@ This function call starts the Scan.
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
 | scanDuration | number | 60 | Duration of Scan phase in sec (10-120) |
-| videoElement | HTMLVideoElement | | Ref (React) or DOMElement refering to video element |
-| canvasElement | HTMLCanvasElement | | Ref (React) or DOMElement refering to canvas element |
+| videoElement | HTMLVideoElement | | Ref (React) or DOMElement referring to video element |
+| canvasElement | HTMLCanvasElement | | Ref (React) or DOMElement referring to canvas element |
 
 ### `stopScan()`
 
@@ -228,6 +231,7 @@ Following are some Errors which are common to both Finger/Face Scan SDK
 | CMSCN01 | Sorry we're unable to compute the signal. Please try again. | SDK failed to perform some logical operation during the scan. |
 
 ## Get Device Model Name
+
 ```js
 import { getDeviceModelName } from "careplix-scan-sdk";
 
